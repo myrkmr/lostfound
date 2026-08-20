@@ -1,0 +1,5 @@
+/target/
+/failed-gui-tests/
+*.class
+*.log
+.DS_Store
