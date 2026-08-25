@@ -3,7 +3,9 @@ package com.examples.lostandfound.view.swing;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.List;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +24,7 @@ public class LostItemSwingView extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private LostAndFoundController lostAndFoundController;
+	private JList<LostItem> lostItemList;
 
 	public LostItemSwingView() {
 		setTitle("Lost and Found Management System");
@@ -79,8 +82,11 @@ public class LostItemSwingView extends JFrame {
 		buttonPanel.add(addButton);
 		buttonPanel.add(deleteButton);
 
-		JList<LostItem> lostItemList = new JList<>();
+		lostItemList = new JList<>();
 		lostItemList.setName("lostItemList");
+		lostItemList.setCellRenderer((list, lostItem, index, selected, focused) ->
+				new DefaultListCellRenderer().getListCellRendererComponent(list,
+						lostItem.getId() + " - " + lostItem.getDescription(), index, selected, focused));
 		lostItemList.addListSelectionListener(
 				event -> deleteButton.setEnabled(!lostItemList.isSelectionEmpty()));
 
@@ -100,6 +106,10 @@ public class LostItemSwingView extends JFrame {
 
 	public void setLostAndFoundController(LostAndFoundController lostAndFoundController) {
 		this.lostAndFoundController = lostAndFoundController;
+	}
+
+	public void showAllLostItems(List<LostItem> lostItems) {
+		lostItemList.setListData(lostItems.toArray(new LostItem[0]));
 	}
 
 	private JTextField createTextField(String name) {
