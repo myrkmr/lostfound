@@ -43,6 +43,10 @@ public class LostItemMongoRepository {
 				.append("description", lostItem.getDescription()));
 	}
 
+	public void delete(String id) {
+		lostItemCollection.deleteOne(Filters.eq("id", id));
+	}
+
 	private LostItem fromDocumentToLostItem(Document document) {
 		return new LostItem("" + document.get("id"), "" + document.get("description"));
 	}
