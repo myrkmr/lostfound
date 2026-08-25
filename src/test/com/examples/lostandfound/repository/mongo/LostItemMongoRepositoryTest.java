@@ -95,6 +95,13 @@ public class LostItemMongoRepositoryTest {
 			.containsExactly(lostItem);
 	}
 
+	@Test
+	public void testDelete() {
+		addTestLostItemToDatabase("1", "test1");
+		lostItemRepository.delete("1");
+		assertThat(readAllLostItemsFromDatabase()).isEmpty();
+	}
+
 	private void addTestLostItemToDatabase(String id, String description) {
 		lostItemCollection.insertOne(
 			new Document()
