@@ -76,6 +76,14 @@ public class LostItemMongoRepositoryTest {
 		assertThat(lostItemRepository.findById("1")).isNull();
 	}
 
+	@Test
+	public void testFindByIdWhenLostItemIsFound() {
+		addTestLostItemToDatabase("1", "test1");
+		addTestLostItemToDatabase("2", "test2");
+		assertThat(lostItemRepository.findById("2"))
+			.isEqualTo(new LostItem("2", "test2"));
+	}
+
 	private void addTestLostItemToDatabase(String id, String description) {
 		lostItemCollection.insertOne(
 			new Document()
