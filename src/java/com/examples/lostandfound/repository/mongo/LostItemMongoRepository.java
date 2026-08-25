@@ -1,0 +1,33 @@
+package com.examples.lostandfound.repository.mongo;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import org.bson.Document;
+
+import com.examples.lostandfound.model.LostItem;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+
+public class LostItemMongoRepository {
+
+	private final MongoCollection<Document> lostItemCollection;
+
+	public LostItemMongoRepository(MongoClient client, String databaseName, String collectionName) {
+		lostItemCollection = client
+			.getDatabase(databaseName)
+			.getCollection(collectionName);
+	}
+
+	public List<LostItem> findAll() {
+		return StreamSupport
+			.stream(lostItemCollection.find().spliterator(), false)
+			.map(this::fromDocumentToLostItem)
+			.collect(Collectors.toList());
+	}
+
+	private LostItem fromDocumentToLostItem(Document document) {
+		return new LostItem("" + document.get("id"), "" + document.get("description"));
+	}
+}
