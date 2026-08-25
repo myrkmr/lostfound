@@ -11,4 +11,6 @@ public interface LostItemRepository {
 	LostItem findById(String id);
 
 	void save(LostItem lostItem);
+
+	void delete(String id);
 }

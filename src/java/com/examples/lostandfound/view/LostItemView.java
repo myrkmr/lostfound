@@ -11,4 +11,6 @@ public interface LostItemView {
 	void lostItemAdded(LostItem lostItem);
 
 	void showError(String message, LostItem lostItem);
+
+	void lostItemRemoved(LostItem lostItem);
 }

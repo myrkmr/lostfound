@@ -27,4 +27,11 @@ public class LostAndFoundController {
 		lostItemRepository.save(lostItem);
 		lostItemView.lostItemAdded(lostItem);
 	}
+
+	public void deleteLostItem(LostItem lostItem) {
+		if (lostItemRepository.findById(lostItem.getId()) != null) {
+			lostItemRepository.delete(lostItem.getId());
+			lostItemView.lostItemRemoved(lostItem);
+		}
+	}
 }
