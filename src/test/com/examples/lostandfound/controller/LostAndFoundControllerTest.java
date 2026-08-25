@@ -87,4 +87,15 @@ public class LostAndFoundControllerTest {
 		inOrder.verify(lostItemRepository).delete("1");
 		inOrder.verify(lostItemView).lostItemRemoved(lostItemToDelete);
 	}
+
+	@Test
+	public void testDeleteLostItemWhenLostItemDoesNotExist() {
+		LostItem lostItem = new LostItem("1", "test");
+		when(lostItemRepository.findById("1"))
+			.thenReturn(null);
+		lostAndFoundController.deleteLostItem(lostItem);
+		verify(lostItemView)
+			.showErrorLostItemNotFound("No existing lost item with id 1", lostItem);
+		verifyNoMoreInteractions(ignoreStubs(lostItemRepository));
+	}
 }
