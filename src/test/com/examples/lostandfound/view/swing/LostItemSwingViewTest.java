@@ -117,4 +117,17 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		GuiActionRunner.execute(() -> lostItemSwingView.showError("error message", lostItem));
 		window.label("errorMessageLabel").requireText("error message: 1 - Wallet");
 	}
+
+	@Test
+	@GUITest
+	public void testShowErrorLostItemNotFoundDisplaysErrorAndRemovesItem() {
+		LostItem firstLostItem = new LostItem("1", "Wallet");
+		LostItem secondLostItem = new LostItem("2", "Keys");
+		GuiActionRunner.execute(
+				() -> lostItemSwingView.showAllLostItems(asList(firstLostItem, secondLostItem)));
+		GuiActionRunner.execute(() -> lostItemSwingView
+				.showErrorLostItemNotFound("error message", firstLostItem));
+		window.label("errorMessageLabel").requireText("error message: 1 - Wallet");
+		assertThat(window.list("lostItemList").contents()).containsExactly("2 - Keys");
+	}
 }
