@@ -1,5 +1,8 @@
 package com.examples.lostandfound.view.swing;
 
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import javax.swing.DefaultListModel;
 
 import org.assertj.swing.annotation.GUITest;
@@ -94,5 +97,16 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Delete Selected")).requireEnabled();
 		window.list("lostItemList").clearSelection();
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	public void testShowAllLostItemsAddsItemDescriptionsToTheList() {
+		LostItem firstLostItem = new LostItem("1", "Wallet");
+		LostItem secondLostItem = new LostItem("2", "Keys");
+		GuiActionRunner.execute(
+				() -> lostItemSwingView.showAllLostItems(asList(firstLostItem, secondLostItem)));
+		assertThat(window.list("lostItemList").contents())
+				.containsExactly("1 - Wallet", "2 - Keys");
 	}
 }
