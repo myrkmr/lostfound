@@ -62,10 +62,10 @@ public class LostItemSwingView extends JFrame {
 			}
 
 			private void updateAddButton() {
-				addButton.setEnabled(!idTextBox.getText().isEmpty()
-						&& !itemNameTextBox.getText().isEmpty()
-						&& !descriptionTextBox.getText().isEmpty()
-						&& !lostDateTextBox.getText().isEmpty());
+				addButton.setEnabled(!idTextBox.getText().trim().isEmpty()
+						&& !itemNameTextBox.getText().trim().isEmpty()
+						&& !descriptionTextBox.getText().trim().isEmpty()
+						&& !lostDateTextBox.getText().trim().isEmpty());
 			}
 		};
 		idTextBox.getDocument().addDocumentListener(documentListener);
