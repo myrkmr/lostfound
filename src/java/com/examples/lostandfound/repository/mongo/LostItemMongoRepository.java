@@ -36,6 +36,13 @@ public class LostItemMongoRepository {
 		return fromDocumentToLostItem(document);
 	}
 
+	public void save(LostItem lostItem) {
+		lostItemCollection.insertOne(
+			new Document()
+				.append("id", lostItem.getId())
+				.append("description", lostItem.getDescription()));
+	}
+
 	private LostItem fromDocumentToLostItem(Document document) {
 		return new LostItem("" + document.get("id"), "" + document.get("description"));
 	}
