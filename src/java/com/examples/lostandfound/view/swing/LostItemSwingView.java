@@ -3,6 +3,7 @@ package com.examples.lostandfound.view.swing;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
@@ -10,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.ListModel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -116,6 +118,19 @@ public class LostItemSwingView extends JFrame {
 	public void showError(String message, LostItem lostItem) {
 		errorMessageLabel.setText(
 				message + ": " + lostItem.getId() + " - " + lostItem.getDescription());
+	}
+
+	public void showErrorLostItemNotFound(String message, LostItem lostItem) {
+		showError(message, lostItem);
+		List<LostItem> remainingLostItems = new ArrayList<>();
+		ListModel<LostItem> lostItems = lostItemList.getModel();
+		for (int index = 0; index < lostItems.getSize(); index++) {
+			LostItem currentLostItem = lostItems.getElementAt(index);
+			if (!currentLostItem.equals(lostItem)) {
+				remainingLostItems.add(currentLostItem);
+			}
+		}
+		showAllLostItems(remainingLostItems);
 	}
 
 	private JTextField createTextField(String name) {
