@@ -132,6 +132,11 @@ public class LostItemSwingView extends JFrame {
 		errorMessageLabel.setText(" ");
 	}
 
+	public void lostItemRemoved(LostItem lostItem) {
+		lostItemListModel.removeElement(lostItem);
+		errorMessageLabel.setText(" ");
+	}
+
 	private JTextField createTextField(String name) {
 		JTextField textField = new JTextField(15);
 		textField.setName(name);
