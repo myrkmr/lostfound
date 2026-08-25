@@ -139,4 +139,17 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		assertThat(window.list("lostItemList").contents()).containsExactly("1 - Wallet");
 		window.label("errorMessageLabel").requireText(" ");
 	}
+
+	@Test
+	@GUITest
+	public void testLostItemRemovedRemovesItemAndClearsError() {
+		LostItem firstLostItem = new LostItem("1", "Wallet");
+		LostItem secondLostItem = new LostItem("2", "Keys");
+		GuiActionRunner.execute(
+				() -> lostItemSwingView.showAllLostItems(asList(firstLostItem, secondLostItem)));
+		GuiActionRunner.execute(
+				() -> lostItemSwingView.lostItemRemoved(new LostItem("1", "Wallet")));
+		assertThat(window.list("lostItemList").contents()).containsExactly("2 - Keys");
+		window.label("errorMessageLabel").requireText(" ");
+	}
 }
