@@ -19,9 +19,12 @@ public class LostAndFoundController {
 	}
 
 	public void newLostItem(LostItem lostItem) {
-		if (lostItemRepository.findById(lostItem.getId()) == null) {
-			lostItemRepository.save(lostItem);
-			lostItemView.lostItemAdded(lostItem);
+		LostItem existingLostItem = lostItemRepository.findById(lostItem.getId());
+		if (existingLostItem != null) {
+			lostItemView.showError("Already existing lost item with id " + lostItem.getId(), existingLostItem);
+			return;
 		}
+		lostItemRepository.save(lostItem);
+		lostItemView.lostItemAdded(lostItem);
 	}
 }
