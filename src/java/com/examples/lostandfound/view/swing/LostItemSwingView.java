@@ -3,15 +3,14 @@ package com.examples.lostandfound.view.swing;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.ListModel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -27,6 +26,7 @@ public class LostItemSwingView extends JFrame {
 
 	private LostAndFoundController lostAndFoundController;
 	private JList<LostItem> lostItemList;
+	private DefaultListModel<LostItem> lostItemListModel;
 	private JLabel errorMessageLabel;
 
 	public LostItemSwingView() {
@@ -85,7 +85,8 @@ public class LostItemSwingView extends JFrame {
 		buttonPanel.add(addButton);
 		buttonPanel.add(deleteButton);
 
-		lostItemList = new JList<>();
+		lostItemListModel = new DefaultListModel<>();
+		lostItemList = new JList<>(lostItemListModel);
 		lostItemList.setName("lostItemList");
 		lostItemList.setCellRenderer((list, lostItem, index, selected, focused) ->
 				new DefaultListCellRenderer().getListCellRendererComponent(list,
@@ -112,7 +113,8 @@ public class LostItemSwingView extends JFrame {
 	}
 
 	public void showAllLostItems(List<LostItem> lostItems) {
-		lostItemList.setListData(lostItems.toArray(new LostItem[0]));
+		lostItemListModel.clear();
+		lostItemListModel.addAll(lostItems);
 	}
 
 	public void showError(String message, LostItem lostItem) {
@@ -122,15 +124,12 @@ public class LostItemSwingView extends JFrame {
 
 	public void showErrorLostItemNotFound(String message, LostItem lostItem) {
 		showError(message, lostItem);
-		List<LostItem> remainingLostItems = new ArrayList<>();
-		ListModel<LostItem> lostItems = lostItemList.getModel();
-		for (int index = 0; index < lostItems.getSize(); index++) {
-			LostItem currentLostItem = lostItems.getElementAt(index);
-			if (!currentLostItem.equals(lostItem)) {
-				remainingLostItems.add(currentLostItem);
-			}
-		}
-		showAllLostItems(remainingLostItems);
+		lostItemListModel.removeElement(lostItem);
+	}
+
+	public void lostItemAdded(LostItem lostItem) {
+		lostItemListModel.addElement(lostItem);
+		errorMessageLabel.setText(" ");
 	}
 
 	private JTextField createTextField(String name) {
