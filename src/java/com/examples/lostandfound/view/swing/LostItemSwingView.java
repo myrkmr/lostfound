@@ -25,6 +25,7 @@ public class LostItemSwingView extends JFrame {
 
 	private LostAndFoundController lostAndFoundController;
 	private JList<LostItem> lostItemList;
+	private JLabel errorMessageLabel;
 
 	public LostItemSwingView() {
 		setTitle("Lost and Found Management System");
@@ -90,7 +91,7 @@ public class LostItemSwingView extends JFrame {
 		lostItemList.addListSelectionListener(
 				event -> deleteButton.setEnabled(!lostItemList.isSelectionEmpty()));
 
-		JLabel errorMessageLabel = new JLabel(" ");
+		errorMessageLabel = new JLabel(" ");
 		errorMessageLabel.setName("errorMessageLabel");
 
 		JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
@@ -110,6 +111,11 @@ public class LostItemSwingView extends JFrame {
 
 	public void showAllLostItems(List<LostItem> lostItems) {
 		lostItemList.setListData(lostItems.toArray(new LostItem[0]));
+	}
+
+	public void showError(String message, LostItem lostItem) {
+		errorMessageLabel.setText(
+				message + ": " + lostItem.getId() + " - " + lostItem.getDescription());
 	}
 
 	private JTextField createTextField(String name) {
