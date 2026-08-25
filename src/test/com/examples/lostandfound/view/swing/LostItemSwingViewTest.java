@@ -130,4 +130,13 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.label("errorMessageLabel").requireText("error message: 1 - Wallet");
 		assertThat(window.list("lostItemList").contents()).containsExactly("2 - Keys");
 	}
+
+	@Test
+	@GUITest
+	public void testLostItemAddedAddsItemAndClearsError() {
+		GuiActionRunner.execute(
+				() -> lostItemSwingView.lostItemAdded(new LostItem("1", "Wallet")));
+		assertThat(window.list("lostItemList").contents()).containsExactly("1 - Wallet");
+		window.label("errorMessageLabel").requireText(" ");
+	}
 }
