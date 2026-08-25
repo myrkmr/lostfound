@@ -1,5 +1,7 @@
 package com.examples.lostandfound.view.swing;
 
+import javax.swing.DefaultListModel;
+
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.core.matcher.JLabelMatcher;
@@ -13,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.examples.lostandfound.controller.LostAndFoundController;
+import com.examples.lostandfound.model.LostItem;
 
 @RunWith(GUITestRunner.class)
 public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
@@ -77,5 +80,19 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("descriptionTextBox").enterText(" ");
 		window.textBox("lostDateTextBox").enterText("2026-08-26");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+	}
+
+	@Test
+	@GUITest
+	@SuppressWarnings("unchecked")
+	public void testDeleteButtonIsEnabledOnlyWhenAnItemIsSelected() {
+		DefaultListModel<LostItem> lostItems = new DefaultListModel<>();
+		lostItems.addElement(new LostItem("1", "Wallet"));
+		GuiActionRunner.execute(() -> window.list("lostItemList").target()
+				.setModel(lostItems));
+		window.list("lostItemList").selectItem(0);
+		window.button(JButtonMatcher.withText("Delete Selected")).requireEnabled();
+		window.list("lostItemList").clearSelection();
+		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
 	}
 }
