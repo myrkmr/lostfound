@@ -3,6 +3,9 @@ package com.examples.lostandfound.repository.mongo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.InetSocketAddress;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -84,10 +87,27 @@ public class LostItemMongoRepositoryTest {
 			.isEqualTo(new LostItem("2", "test2"));
 	}
 
+	@Test
+	public void testSave() {
+		LostItem lostItem = new LostItem("1", "added item");
+		lostItemRepository.save(lostItem);
+		assertThat(readAllLostItemsFromDatabase())
+			.containsExactly(lostItem);
+	}
+
 	private void addTestLostItemToDatabase(String id, String description) {
 		lostItemCollection.insertOne(
 			new Document()
 				.append("id", id)
 				.append("description", description));
+	}
+
+	private List<LostItem> readAllLostItemsFromDatabase() {
+		return StreamSupport
+			.stream(lostItemCollection.find().spliterator(), false)
+			.map(document -> new LostItem(
+				"" + document.get("id"),
+				"" + document.get("description")))
+			.collect(Collectors.toList());
 	}
 }
