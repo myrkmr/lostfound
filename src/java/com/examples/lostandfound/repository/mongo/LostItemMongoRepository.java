@@ -27,6 +27,10 @@ public class LostItemMongoRepository {
 			.collect(Collectors.toList());
 	}
 
+	public LostItem findById(String id) {
+		return null;
+	}
+
 	private LostItem fromDocumentToLostItem(Document document) {
 		return new LostItem("" + document.get("id"), "" + document.get("description"));
 	}
