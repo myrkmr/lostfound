@@ -1,6 +1,7 @@
 package com.examples.lostandfound.controller;
 
 import static java.util.Arrays.asList;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -48,5 +50,16 @@ public class LostAndFoundControllerTest {
 		lostAndFoundController.allLostItems();
 		verify(lostItemView)
 			.showAllLostItems(lostItems);
+	}
+
+	@Test
+	public void testNewLostItemWhenLostItemDoesNotAlreadyExist() {
+		LostItem lostItem = new LostItem("1", "test");
+		when(lostItemRepository.findById("1"))
+			.thenReturn(null);
+		lostAndFoundController.newLostItem(lostItem);
+		InOrder inOrder = inOrder(lostItemRepository, lostItemView);
+		inOrder.verify(lostItemRepository).save(lostItem);
+		inOrder.verify(lostItemView).lostItemAdded(lostItem);
 	}
 }
