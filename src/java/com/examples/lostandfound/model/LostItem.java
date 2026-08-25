@@ -1,5 +1,7 @@
 package com.examples.lostandfound.model;
 
+import java.util.Objects;
+
 public class LostItem {
 
 	private String id;
@@ -19,5 +21,22 @@ public class LostItem {
 
 	public String getDescription() {
 		return description;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, id);
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+		if (object == null || getClass() != object.getClass()) {
+			return false;
+		}
+		LostItem other = (LostItem) object;
+		return Objects.equals(description, other.description) && Objects.equals(id, other.id);
 	}
 }
