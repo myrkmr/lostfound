@@ -58,4 +58,14 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
 		window.label("errorMessageLabel").requireText(" ");
 	}
+
+	@Test
+	@GUITest
+	public void testAddButtonIsEnabledWhenAllFieldsAreNonBlank() {
+		window.textBox("idTextBox").enterText("1");
+		window.textBox("itemNameTextBox").enterText("Wallet");
+		window.textBox("descriptionTextBox").enterText("Black wallet");
+		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+	}
 }
