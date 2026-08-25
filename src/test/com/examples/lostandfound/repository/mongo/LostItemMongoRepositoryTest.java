@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.bson.Document;
 
 import com.examples.lostandfound.model.LostItem;
+import com.examples.lostandfound.repository.LostItemRepository;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoCollection;
@@ -62,6 +63,11 @@ public class LostItemMongoRepositoryTest {
 	@Test
 	public void testFindAllWhenDatabaseIsEmpty() {
 		assertThat(lostItemRepository.findAll()).isEmpty();
+	}
+
+	@Test
+	public void testImplementsLostItemRepository() {
+		assertThat(lostItemRepository).isInstanceOf(LostItemRepository.class);
 	}
 
 	@Test
