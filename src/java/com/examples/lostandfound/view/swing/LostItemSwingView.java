@@ -11,6 +11,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import com.examples.lostandfound.controller.LostAndFoundController;
 import com.examples.lostandfound.model.LostItem;
@@ -42,6 +44,34 @@ public class LostItemSwingView extends JFrame {
 
 		JButton addButton = new JButton("Add");
 		addButton.setEnabled(false);
+		DocumentListener documentListener = new DocumentListener() {
+
+			@Override
+			public void insertUpdate(DocumentEvent event) {
+				updateAddButton();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent event) {
+				updateAddButton();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent event) {
+				updateAddButton();
+			}
+
+			private void updateAddButton() {
+				addButton.setEnabled(!idTextBox.getText().isEmpty()
+						&& !itemNameTextBox.getText().isEmpty()
+						&& !descriptionTextBox.getText().isEmpty()
+						&& !lostDateTextBox.getText().isEmpty());
+			}
+		};
+		idTextBox.getDocument().addDocumentListener(documentListener);
+		itemNameTextBox.getDocument().addDocumentListener(documentListener);
+		descriptionTextBox.getDocument().addDocumentListener(documentListener);
+		lostDateTextBox.getDocument().addDocumentListener(documentListener);
 		JButton deleteButton = new JButton("Delete Selected");
 		deleteButton.setEnabled(false);
 
