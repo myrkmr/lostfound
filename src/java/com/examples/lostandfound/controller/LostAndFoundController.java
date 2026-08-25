@@ -29,9 +29,11 @@ public class LostAndFoundController {
 	}
 
 	public void deleteLostItem(LostItem lostItem) {
-		if (lostItemRepository.findById(lostItem.getId()) != null) {
-			lostItemRepository.delete(lostItem.getId());
-			lostItemView.lostItemRemoved(lostItem);
+		if (lostItemRepository.findById(lostItem.getId()) == null) {
+			lostItemView.showErrorLostItemNotFound("No existing lost item with id " + lostItem.getId(), lostItem);
+			return;
 		}
+		lostItemRepository.delete(lostItem.getId());
+		lostItemView.lostItemRemoved(lostItem);
 	}
 }
