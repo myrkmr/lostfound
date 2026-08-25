@@ -9,6 +9,7 @@ import org.bson.Document;
 import com.examples.lostandfound.model.LostItem;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 
 public class LostItemMongoRepository {
 
@@ -28,7 +29,11 @@ public class LostItemMongoRepository {
 	}
 
 	public LostItem findById(String id) {
-		return null;
+		Document document = lostItemCollection.find(Filters.eq("id", id)).first();
+		if (document == null) {
+			return null;
+		}
+		return fromDocumentToLostItem(document);
 	}
 
 	private LostItem fromDocumentToLostItem(Document document) {
