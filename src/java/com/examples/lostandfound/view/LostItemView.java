@@ -7,4 +7,6 @@ import com.examples.lostandfound.model.LostItem;
 public interface LostItemView {
 
 	void showAllLostItems(List<LostItem> lostItems);
+
+	void lostItemAdded(LostItem lostItem);
 }
