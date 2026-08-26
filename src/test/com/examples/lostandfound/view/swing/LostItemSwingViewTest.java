@@ -2,6 +2,7 @@ package com.examples.lostandfound.view.swing;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 
 import javax.swing.DefaultListModel;
 
@@ -151,5 +152,16 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 				() -> lostItemSwingView.lostItemRemoved(new LostItem("1", "Wallet")));
 		assertThat(window.list("lostItemList").contents()).containsExactly("2 - Keys");
 		window.label("errorMessageLabel").requireText(" ");
+	}
+
+	@Test
+	@GUITest
+	public void testAddButtonDelegatesToController() {
+		window.textBox("idTextBox").enterText("1");
+		window.textBox("itemNameTextBox").enterText("Wallet");
+		window.textBox("descriptionTextBox").enterText("Black wallet");
+		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.button(JButtonMatcher.withText("Add")).click();
+		verify(lostAndFoundController).newLostItem(new LostItem("1", "Black wallet"));
 	}
 }
