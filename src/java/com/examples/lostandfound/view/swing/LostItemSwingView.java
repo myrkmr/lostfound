@@ -19,8 +19,9 @@ import javax.swing.event.DocumentListener;
 
 import com.examples.lostandfound.controller.LostAndFoundController;
 import com.examples.lostandfound.model.LostItem;
+import com.examples.lostandfound.view.LostItemView;
 
-public class LostItemSwingView extends JFrame {
+public class LostItemSwingView extends JFrame implements LostItemView {
 
 	private static final long serialVersionUID = 1L;
 
