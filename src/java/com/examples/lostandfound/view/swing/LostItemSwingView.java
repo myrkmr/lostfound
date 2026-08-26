@@ -106,7 +106,6 @@ public class LostItemSwingView extends JFrame implements LostItemView {
 		bottomPanel.add(buttonPanel);
 		bottomPanel.add(errorMessageLabel);
 
-		setLayout(new BorderLayout());
 		add(formPanel, BorderLayout.NORTH);
 		add(new JScrollPane(lostItemList), BorderLayout.CENTER);
 		add(bottomPanel, BorderLayout.SOUTH);
