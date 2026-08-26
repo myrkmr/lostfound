@@ -139,6 +139,8 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testLostItemAddedAddsItemAndClearsError() {
+		GuiActionRunner.execute(() -> lostItemSwingView
+				.showError("error message", new LostItem("9", "Umbrella")));
 		GuiActionRunner.execute(
 				() -> lostItemSwingView.lostItemAdded(new LostItem("1", "Wallet")));
 		assertThat(window.list("lostItemList").contents()).containsExactly("1 - Wallet");
