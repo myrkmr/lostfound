@@ -50,6 +50,8 @@ public class LostItemSwingView extends JFrame {
 
 		JButton addButton = new JButton("Add");
 		addButton.setEnabled(false);
+		addButton.addActionListener(event -> lostAndFoundController.newLostItem(
+				new LostItem(idTextBox.getText(), descriptionTextBox.getText())));
 		DocumentListener documentListener = new DocumentListener() {
 
 			@Override
