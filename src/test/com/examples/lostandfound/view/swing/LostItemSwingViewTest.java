@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.AbstractDocument;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -226,6 +228,24 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("lostDateTextBox").setText("");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+	}
+
+	@Test
+	@GUITest
+	public void testChangedDocumentUpdateUpdatesAddButtonState() {
+		window.textBox("idTextBox").enterText("1");
+		window.textBox("itemNameTextBox").enterText("Wallet");
+		window.textBox("descriptionTextBox").enterText("Black wallet");
+		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		GuiActionRunner.execute(() -> window.button(JButtonMatcher.withText("Add"))
+				.target().setEnabled(false));
+		AbstractDocument document = (AbstractDocument) window.textBox("idTextBox")
+				.target().getDocument();
+		DocumentListener documentListener = asList(document.getDocumentListeners()).stream()
+				.filter(listener -> listener.getClass().getEnclosingClass() == LostItemSwingView.class)
+				.findFirst().orElseThrow();
+		GuiActionRunner.execute(() -> documentListener.changedUpdate(null));
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 	}
 
