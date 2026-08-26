@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.examples.lostandfound.controller.LostAndFoundController;
 import com.examples.lostandfound.model.LostItem;
+import com.examples.lostandfound.view.LostItemView;
 
 @RunWith(GUITestRunner.class)
 public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
@@ -175,5 +176,11 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.list("lostItemList").selectItem(0);
 		window.button(JButtonMatcher.withText("Delete Selected")).click();
 		verify(lostAndFoundController).deleteLostItem(firstLostItem);
+	}
+
+	@Test
+	@GUITest
+	public void testSwingViewImplementsLostItemView() {
+		assertThat(lostItemSwingView).isInstanceOf(LostItemView.class);
 	}
 }
