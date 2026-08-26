@@ -4,7 +4,10 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
+import java.awt.BorderLayout;
+
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -182,5 +185,17 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testSwingViewImplementsLostItemView() {
 		assertThat(lostItemSwingView).isInstanceOf(LostItemView.class);
+	}
+
+	@Test
+	@GUITest
+	public void testWindowConfiguration() {
+		LostItemSwingView unshownView = GuiActionRunner.execute(LostItemSwingView::new);
+		assertThat(unshownView.getTitle()).isEqualTo("Lost and Found Management System");
+		assertThat(unshownView.getDefaultCloseOperation()).isEqualTo(JFrame.DISPOSE_ON_CLOSE);
+		assertThat(unshownView.getLayout()).isInstanceOf(BorderLayout.class);
+		assertThat(unshownView.getWidth()).isPositive();
+		assertThat(unshownView.getHeight()).isPositive();
+		GuiActionRunner.execute(unshownView::dispose);
 	}
 }
