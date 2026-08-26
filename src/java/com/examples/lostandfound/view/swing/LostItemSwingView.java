@@ -95,6 +95,8 @@ public class LostItemSwingView extends JFrame {
 						lostItem.getId() + " - " + lostItem.getDescription(), index, selected, focused));
 		lostItemList.addListSelectionListener(
 				event -> deleteButton.setEnabled(!lostItemList.isSelectionEmpty()));
+		deleteButton.addActionListener(event ->
+				lostAndFoundController.deleteLostItem(lostItemList.getSelectedValue()));
 
 		errorMessageLabel = new JLabel(" ");
 		errorMessageLabel.setName("errorMessageLabel");
