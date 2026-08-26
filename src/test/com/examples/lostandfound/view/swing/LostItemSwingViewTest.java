@@ -220,4 +220,14 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("lostDateTextBox").enterText("2026-08-26");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 	}
+
+	@Test
+	@GUITest
+	public void testShowAllLostItemsReplacesExistingContents() {
+		GuiActionRunner.execute(() -> lostItemSwingView
+				.showAllLostItems(asList(new LostItem("1", "Wallet"))));
+		GuiActionRunner.execute(() -> lostItemSwingView
+				.showAllLostItems(asList(new LostItem("2", "Keys"))));
+		assertThat(window.list("lostItemList").contents()).containsExactly("2 - Keys");
+	}
 }
