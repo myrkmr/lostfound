@@ -198,4 +198,26 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		assertThat(unshownView.getHeight()).isPositive();
 		GuiActionRunner.execute(unshownView::dispose);
 	}
+
+	@Test
+	@GUITest
+	public void testEveryFieldUpdatesAddButtonState() {
+		window.textBox("idTextBox").enterText("1");
+		window.textBox("itemNameTextBox").enterText("Wallet");
+		window.textBox("descriptionTextBox").enterText("Black wallet");
+		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		window.textBox("itemNameTextBox").setText("");
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		window.textBox("itemNameTextBox").enterText("Wallet");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		window.textBox("descriptionTextBox").setText("");
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		window.textBox("descriptionTextBox").enterText("Black wallet");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		window.textBox("lostDateTextBox").setText("");
+		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+	}
 }
