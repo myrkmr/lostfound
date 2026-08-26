@@ -164,4 +164,16 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.button(JButtonMatcher.withText("Add")).click();
 		verify(lostAndFoundController).newLostItem(new LostItem("1", "Black wallet"));
 	}
+
+	@Test
+	@GUITest
+	public void testDeleteButtonDelegatesSelectedItemToController() {
+		LostItem firstLostItem = new LostItem("1", "Wallet");
+		LostItem secondLostItem = new LostItem("2", "Keys");
+		GuiActionRunner.execute(
+				() -> lostItemSwingView.showAllLostItems(asList(firstLostItem, secondLostItem)));
+		window.list("lostItemList").selectItem(0);
+		window.button(JButtonMatcher.withText("Delete Selected")).click();
+		verify(lostAndFoundController).deleteLostItem(firstLostItem);
+	}
 }
