@@ -21,6 +21,8 @@
 		<testcontainers.version>1.21.4</testcontainers.version>
 		<picocli.version>4.7.7</picocli.version>
 		<logback.version>1.2.13</logback.version>
+		<pitest.version>1.20.3</pitest.version>
+		<coveralls.maven.plugin.version>5.1.0</coveralls.maven.plugin.version>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.sources>${project.basedir}/src/java</sonar.sources>
 		<sonar.tests>${project.basedir}/src/test,${project.basedir}/src/it,${project.basedir}/src/e2e</sonar.tests>
@@ -91,6 +93,14 @@
 					<groupId>org.sonarsource.scanner.maven</groupId>
 					<artifactId>sonar-maven-plugin</artifactId>
 					<version>5.6.0.6792</version>
+				</plugin>
+				<plugin>
+					<groupId>com.github.hazendaz.maven</groupId>
+					<artifactId>coveralls-maven-plugin</artifactId>
+					<version>${coveralls.maven.plugin.version}</version>
+					<configuration>
+						<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -211,6 +221,117 @@
 								<phase>test</phase>
 								<goals>
 									<goal>report</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>check</id>
+								<phase>test</phase>
+								<goals>
+									<goal>check</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<rule>
+											<element>BUNDLE</element>
+											<limits>
+												<limit>
+													<counter>INSTRUCTION</counter>
+													<value>COVEREDRATIO</value>
+													<minimum>1.00</minimum>
+												</limit>
+												<limit>
+													<counter>BRANCH</counter>
+													<value>COVEREDRATIO</value>
+													<minimum>1.00</minimum>
+												</limit>
+												<limit>
+													<counter>LINE</counter>
+													<value>COVEREDRATIO</value>
+													<minimum>1.00</minimum>
+												</limit>
+											</limits>
+										</rule>
+									</rules>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>coveralls</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.14</version>
+						<configuration>
+							<excludes>
+								<exclude>**/model/*.*</exclude>
+								<exclude>**/LostAndFoundSwingApp.*</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>coveralls-jacoco-report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.github.hazendaz.maven</groupId>
+						<artifactId>coveralls-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>pit</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<version>${pitest.version}</version>
+						<configuration>
+							<targetClasses>
+								<param>com.examples.lostandfound.controller.LostAndFoundController</param>
+								<param>com.examples.lostandfound.repository.mongo.LostItemMongoRepository</param>
+							</targetClasses>
+							<targetTests>
+								<param>com.examples.lostandfound.controller.LostAndFoundControllerTest</param>
+								<param>com.examples.lostandfound.repository.mongo.LostItemMongoRepositoryTest</param>
+							</targetTests>
+							<parseSurefireConfig>false</parseSurefireConfig>
+							<threads>1</threads>
+							<mutationThreshold>100</mutationThreshold>
+							<coverageThreshold>100</coverageThreshold>
+							<failWhenNoMutations>false</failWhenNoMutations>
+							<timestampedReports>false</timestampedReports>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>mutationCoverage</goal>
 								</goals>
 							</execution>
 						</executions>

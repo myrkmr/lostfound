@@ -75,10 +75,10 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testAddButtonIsEnabledWhenAllFieldsAreNonBlank() {
-		window.textBox("idTextBox").enterText("1");
-		window.textBox("itemNameTextBox").enterText("Wallet");
-		window.textBox("descriptionTextBox").enterText("Black wallet");
-		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.textBox("idTextBox").setText("1");
+		window.textBox("itemNameTextBox").setText("Wallet");
+		window.textBox("descriptionTextBox").setText("Black wallet");
+		window.textBox("lostDateTextBox").setText("2026-08-26");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 	}
 
@@ -100,9 +100,11 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		lostItems.addElement(new LostItem("1", "Wallet"));
 		GuiActionRunner.execute(() -> window.list("lostItemList").target()
 				.setModel(lostItems));
-		window.list("lostItemList").selectItem(0);
+		GuiActionRunner.execute(() -> window.list("lostItemList").target()
+				.setSelectedIndex(0));
 		window.button(JButtonMatcher.withText("Delete Selected")).requireEnabled();
-		window.list("lostItemList").clearSelection();
+		GuiActionRunner.execute(() -> window.list("lostItemList").target()
+				.clearSelection());
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
 	}
 
@@ -167,11 +169,13 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testAddButtonDelegatesToController() {
-		window.textBox("idTextBox").enterText("1");
-		window.textBox("itemNameTextBox").enterText("Wallet");
-		window.textBox("descriptionTextBox").enterText("Black wallet");
-		window.textBox("lostDateTextBox").enterText("2026-08-26");
-		window.button(JButtonMatcher.withText("Add")).click();
+		window.textBox("idTextBox").setText("1");
+		window.textBox("itemNameTextBox").setText("Wallet");
+		window.textBox("descriptionTextBox").setText("Black wallet");
+		window.textBox("lostDateTextBox").setText("2026-08-26");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		GuiActionRunner.execute(
+				() -> window.button(JButtonMatcher.withText("Add")).target().doClick());
 		verify(lostAndFoundController).newLostItem(new LostItem("1", "Black wallet"));
 	}
 
@@ -208,36 +212,36 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testEveryFieldUpdatesAddButtonState() {
-		window.textBox("idTextBox").enterText("1");
-		window.textBox("itemNameTextBox").enterText("Wallet");
-		window.textBox("descriptionTextBox").enterText("Black wallet");
-		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.textBox("idTextBox").setText("1");
+		window.textBox("itemNameTextBox").setText("Wallet");
+		window.textBox("descriptionTextBox").setText("Black wallet");
+		window.textBox("lostDateTextBox").setText("2026-08-26");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 		window.textBox("idTextBox").setText("");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
-		window.textBox("idTextBox").enterText("1");
+		window.textBox("idTextBox").setText("1");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 		window.textBox("itemNameTextBox").setText("");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
-		window.textBox("itemNameTextBox").enterText("Wallet");
+		window.textBox("itemNameTextBox").setText("Wallet");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 		window.textBox("descriptionTextBox").setText("");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
-		window.textBox("descriptionTextBox").enterText("Black wallet");
+		window.textBox("descriptionTextBox").setText("Black wallet");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 		window.textBox("lostDateTextBox").setText("");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
-		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.textBox("lostDateTextBox").setText("2026-08-26");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 	}
 
 	@Test
 	@GUITest
 	public void testChangedDocumentUpdateUpdatesAddButtonState() {
-		window.textBox("idTextBox").enterText("1");
-		window.textBox("itemNameTextBox").enterText("Wallet");
-		window.textBox("descriptionTextBox").enterText("Black wallet");
-		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.textBox("idTextBox").setText("1");
+		window.textBox("itemNameTextBox").setText("Wallet");
+		window.textBox("descriptionTextBox").setText("Black wallet");
+		window.textBox("lostDateTextBox").setText("2026-08-26");
 		GuiActionRunner.execute(() -> window.button(JButtonMatcher.withText("Add"))
 				.target().setEnabled(false));
 		AbstractDocument document = (AbstractDocument) window.textBox("idTextBox")
