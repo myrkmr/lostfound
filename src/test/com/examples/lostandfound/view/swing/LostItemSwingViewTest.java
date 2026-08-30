@@ -167,11 +167,13 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testAddButtonDelegatesToController() {
-		window.textBox("idTextBox").enterText("1");
-		window.textBox("itemNameTextBox").enterText("Wallet");
-		window.textBox("descriptionTextBox").enterText("Black wallet");
-		window.textBox("lostDateTextBox").enterText("2026-08-26");
-		window.button(JButtonMatcher.withText("Add")).click();
+		window.textBox("idTextBox").setText("1");
+		window.textBox("itemNameTextBox").setText("Wallet");
+		window.textBox("descriptionTextBox").setText("Black wallet");
+		window.textBox("lostDateTextBox").setText("2026-08-26");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		GuiActionRunner.execute(
+				() -> window.button(JButtonMatcher.withText("Add")).target().doClick());
 		verify(lostAndFoundController).newLostItem(new LostItem("1", "Black wallet"));
 	}
 
