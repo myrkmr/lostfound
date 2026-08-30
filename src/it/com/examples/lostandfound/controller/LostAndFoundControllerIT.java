@@ -1,6 +1,7 @@
 package com.examples.lostandfound.controller;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 
 import org.junit.After;
@@ -55,5 +56,13 @@ public class LostAndFoundControllerIT {
 		lostItemRepository.save(lostItem);
 		lostAndFoundController.allLostItems();
 		verify(lostItemView).showAllLostItems(asList(lostItem));
+	}
+
+	@Test
+	public void testNewLostItem() {
+		LostItem lostItem = new LostItem("1", "Wallet");
+		lostAndFoundController.newLostItem(lostItem);
+		verify(lostItemView).lostItemAdded(lostItem);
+		assertThat(lostItemRepository.findById("1")).isEqualTo(lostItem);
 	}
 }
