@@ -100,9 +100,11 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		lostItems.addElement(new LostItem("1", "Wallet"));
 		GuiActionRunner.execute(() -> window.list("lostItemList").target()
 				.setModel(lostItems));
-		window.list("lostItemList").selectItem(0);
+		GuiActionRunner.execute(() -> window.list("lostItemList").target()
+				.setSelectedIndex(0));
 		window.button(JButtonMatcher.withText("Delete Selected")).requireEnabled();
-		window.list("lostItemList").clearSelection();
+		GuiActionRunner.execute(() -> window.list("lostItemList").target()
+				.clearSelection());
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
 	}
 
