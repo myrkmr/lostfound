@@ -73,6 +73,7 @@ public class LostAndFoundSwingAppE2E extends AssertJSwingJUnitTestCase {
 		window.textBox("itemNameTextBox").enterText("Phone");
 		window.textBox("descriptionTextBox").enterText("Mobile phone");
 		window.textBox("lostDateTextBox").enterText("2026-08-30");
+		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 		window.button(JButtonMatcher.withText("Add")).click();
 		assertThat(window.list("lostItemList").contents()).contains("3 - Mobile phone");
 		Document savedItem = mongoClient.getDatabase(DATABASE_NAME).getCollection(COLLECTION_NAME)
