@@ -54,4 +54,12 @@ public class LostItemMongoRepositoryTestcontainersIT {
 		lostItemCollection.insertOne(new Document().append("id", "2").append("description", "Keys"));
 		assertThat(lostItemRepository.findById("2")).isEqualTo(new LostItem("2", "Keys"));
 	}
+
+	@Test
+	public void testSave() {
+		lostItemRepository.save(new LostItem("1", "Wallet"));
+		Document savedItem = lostItemCollection.find(new Document("id", "1")).first();
+		assertThat(savedItem.getString("id")).isEqualTo("1");
+		assertThat(savedItem.getString("description")).isEqualTo("Wallet");
+	}
 }
