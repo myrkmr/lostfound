@@ -21,6 +21,7 @@
 		<testcontainers.version>1.21.4</testcontainers.version>
 		<picocli.version>4.7.7</picocli.version>
 		<logback.version>1.2.13</logback.version>
+		<pitest.version>1.20.3</pitest.version>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.sources>${project.basedir}/src/java</sonar.sources>
 		<sonar.tests>${project.basedir}/src/test,${project.basedir}/src/it,${project.basedir}/src/e2e</sonar.tests>
@@ -211,6 +212,42 @@
 								<phase>test</phase>
 								<goals>
 									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>pit</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<version>${pitest.version}</version>
+						<configuration>
+							<targetClasses>
+								<param>com.examples.lostandfound.controller.LostAndFoundController</param>
+								<param>com.examples.lostandfound.repository.mongo.LostItemMongoRepository</param>
+							</targetClasses>
+							<targetTests>
+								<param>com.examples.lostandfound.controller.LostAndFoundControllerTest</param>
+								<param>com.examples.lostandfound.repository.mongo.LostItemMongoRepositoryTest</param>
+							</targetTests>
+							<parseSurefireConfig>false</parseSurefireConfig>
+							<threads>1</threads>
+							<mutationThreshold>100</mutationThreshold>
+							<coverageThreshold>100</coverageThreshold>
+							<failWhenNoMutations>false</failWhenNoMutations>
+							<timestampedReports>false</timestampedReports>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<goals>
+									<goal>mutationCoverage</goal>
 								</goals>
 							</execution>
 						</executions>
