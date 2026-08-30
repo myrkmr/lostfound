@@ -79,4 +79,19 @@ public class LostAndFoundSwingAppE2E extends AssertJSwingJUnitTestCase {
 				.find(new Document("id", "3")).first();
 		assertThat(savedItem.getString("description")).isEqualTo("Mobile phone");
 	}
+
+	@Test
+	@GUITest
+	public void testAddButtonRejectsDuplicateId() {
+		window.textBox("idTextBox").enterText("1");
+		window.textBox("itemNameTextBox").enterText("Another wallet");
+		window.textBox("descriptionTextBox").enterText("Duplicate item");
+		window.textBox("lostDateTextBox").enterText("2026-08-30");
+		window.button(JButtonMatcher.withText("Add")).click();
+		assertThat(window.label("errorMessageLabel").text())
+				.isEqualTo("Already existing lost item with id 1: 1 - Wallet");
+		long matchingItems = mongoClient.getDatabase(DATABASE_NAME).getCollection(COLLECTION_NAME)
+				.countDocuments(new Document("id", "1"));
+		assertThat(matchingItems).isEqualTo(1);
+	}
 }
