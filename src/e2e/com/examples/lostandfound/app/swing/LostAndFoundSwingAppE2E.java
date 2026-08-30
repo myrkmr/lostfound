@@ -1,0 +1,67 @@
+package com.examples.lostandfound.app.swing;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.swing.launcher.ApplicationLauncher.application;
+
+import javax.swing.JFrame;
+
+import org.assertj.swing.annotation.GUITest;
+import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.finder.WindowFinder;
+import org.assertj.swing.fixture.FrameFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
+import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.bson.Document;
+import org.junit.ClassRule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.testcontainers.containers.MongoDBContainer;
+
+import com.mongodb.MongoClient;
+
+@RunWith(GUITestRunner.class)
+public class LostAndFoundSwingAppE2E extends AssertJSwingJUnitTestCase {
+
+	@ClassRule
+	public static final MongoDBContainer mongo = new MongoDBContainer("mongo:5");
+
+	private static final String DATABASE_NAME = "lostfound-e2e";
+	private static final String COLLECTION_NAME = "lostitems";
+
+	private MongoClient mongoClient;
+	private FrameFixture window;
+
+	@Override
+	protected void onSetUp() {
+		mongoClient = new MongoClient(mongo.getHost(), mongo.getFirstMappedPort());
+		mongoClient.getDatabase(DATABASE_NAME).drop();
+		mongoClient.getDatabase(DATABASE_NAME).getCollection(COLLECTION_NAME)
+				.insertOne(new Document().append("id", "1").append("description", "Wallet"));
+		mongoClient.getDatabase(DATABASE_NAME).getCollection(COLLECTION_NAME)
+				.insertOne(new Document().append("id", "2").append("description", "Keys"));
+		application("com.examples.lostandfound.app.swing.LostAndFoundSwingApp")
+				.withArgs(
+						"--mongo-host=" + mongo.getHost(),
+						"--mongo-port=" + mongo.getFirstMappedPort(),
+						"--db-name=" + DATABASE_NAME,
+						"--db-collection=" + COLLECTION_NAME)
+				.start();
+		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
+			@Override
+			protected boolean isMatching(JFrame frame) {
+				return "Lost and Found Management System".equals(frame.getTitle()) && frame.isShowing();
+			}
+		}).using(robot());
+	}
+
+	@Override
+	protected void onTearDown() {
+		mongoClient.close();
+	}
+
+	@Test
+	@GUITest
+	public void testOnStartAllDatabaseItemsAreShown() {
+		assertThat(window.list("lostItemList").contents()).containsExactly("1 - Wallet", "2 - Keys");
+	}
+}
