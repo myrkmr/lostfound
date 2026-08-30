@@ -75,10 +75,10 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	@Test
 	@GUITest
 	public void testAddButtonIsEnabledWhenAllFieldsAreNonBlank() {
-		window.textBox("idTextBox").enterText("1");
-		window.textBox("itemNameTextBox").enterText("Wallet");
-		window.textBox("descriptionTextBox").enterText("Black wallet");
-		window.textBox("lostDateTextBox").enterText("2026-08-26");
+		window.textBox("idTextBox").setText("1");
+		window.textBox("itemNameTextBox").setText("Wallet");
+		window.textBox("descriptionTextBox").setText("Black wallet");
+		window.textBox("lostDateTextBox").setText("2026-08-26");
 		window.button(JButtonMatcher.withText("Add")).requireEnabled();
 	}
 
