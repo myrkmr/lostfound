@@ -65,4 +65,13 @@ public class LostAndFoundControllerIT {
 		verify(lostItemView).lostItemAdded(lostItem);
 		assertThat(lostItemRepository.findById("1")).isEqualTo(lostItem);
 	}
+
+	@Test
+	public void testDeleteLostItem() {
+		LostItem lostItem = new LostItem("1", "Wallet");
+		lostItemRepository.save(lostItem);
+		lostAndFoundController.deleteLostItem(lostItem);
+		verify(lostItemView).lostItemRemoved(lostItem);
+		assertThat(lostItemRepository.findById("1")).isNull();
+	}
 }
