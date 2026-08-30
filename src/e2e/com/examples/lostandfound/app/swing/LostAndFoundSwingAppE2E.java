@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.matcher.JButtonMatcher;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
@@ -63,5 +64,19 @@ public class LostAndFoundSwingAppE2E extends AssertJSwingJUnitTestCase {
 	@GUITest
 	public void testOnStartAllDatabaseItemsAreShown() {
 		assertThat(window.list("lostItemList").contents()).containsExactly("1 - Wallet", "2 - Keys");
+	}
+
+	@Test
+	@GUITest
+	public void testAddButtonSuccess() {
+		window.textBox("idTextBox").enterText("3");
+		window.textBox("itemNameTextBox").enterText("Phone");
+		window.textBox("descriptionTextBox").enterText("Mobile phone");
+		window.textBox("lostDateTextBox").enterText("2026-08-30");
+		window.button(JButtonMatcher.withText("Add")).click();
+		assertThat(window.list("lostItemList").contents()).contains("3 - Mobile phone");
+		Document savedItem = mongoClient.getDatabase(DATABASE_NAME).getCollection(COLLECTION_NAME)
+				.find(new Document("id", "3")).first();
+		assertThat(savedItem.getString("description")).isEqualTo("Mobile phone");
 	}
 }
