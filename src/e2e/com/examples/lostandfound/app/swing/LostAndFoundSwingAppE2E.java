@@ -107,4 +107,17 @@ public class LostAndFoundSwingAppE2E extends AssertJSwingJUnitTestCase {
 				.countDocuments(new Document("id", "1"));
 		assertThat(matchingItems).isZero();
 	}
+
+	@Test
+	@GUITest
+	public void testDeleteButtonRejectsMissingItem() {
+		window.list("lostItemList").selectItem("1 - Wallet");
+		mongoClient.getDatabase(DATABASE_NAME).getCollection(COLLECTION_NAME)
+				.deleteOne(new Document("id", "1"));
+		window.button(JButtonMatcher.withText("Delete Selected")).requireEnabled();
+		window.button(JButtonMatcher.withText("Delete Selected")).click();
+		assertThat(window.label("errorMessageLabel").text())
+				.isEqualTo("No existing lost item with id 1: 1 - Wallet");
+		assertThat(window.list("lostItemList").contents()).doesNotContain("1 - Wallet");
+	}
 }
