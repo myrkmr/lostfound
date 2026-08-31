@@ -25,7 +25,7 @@ public class LostItemSwingView extends JFrame implements LostItemView {
 
 	private static final long serialVersionUID = 1L;
 
-	private LostAndFoundController lostAndFoundController;
+	private transient LostAndFoundController lostAndFoundController;
 	private JList<LostItem> lostItemList;
 	private DefaultListModel<LostItem> lostItemListModel;
 	private JLabel errorMessageLabel;
