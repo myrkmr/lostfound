@@ -102,7 +102,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 				.setModel(lostItems));
 		GuiActionRunner.execute(() -> window.list("lostItemList").target()
 				.setSelectedIndex(0));
-		window.button(JButtonMatcher.withText("Delete Selected")).requireEnabled();
+		assertThat(window.button(JButtonMatcher.withText("Delete Selected")).target().isEnabled()).isTrue();
 		GuiActionRunner.execute(() -> window.list("lostItemList").target()
 				.clearSelection());
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
