@@ -124,7 +124,8 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testShowErrorDisplaysMessageAndLostItem() {
 		LostItem lostItem = new LostItem("1", "Wallet");
 		GuiActionRunner.execute(() -> lostItemSwingView.showError("error message", lostItem));
-		window.label("errorMessageLabel").requireText("error message: 1 - Wallet");
+		assertThat(window.label("errorMessageLabel").target().getText())
+				.isEqualTo("error message: 1 - Wallet");
 	}
 
 	@Test
