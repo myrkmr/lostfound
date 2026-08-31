@@ -233,7 +233,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("lostDateTextBox").setText("");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 		window.textBox("lostDateTextBox").setText("2026-08-26");
-		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isTrue();
 	}
 
 	@Test
