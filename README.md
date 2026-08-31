@@ -7,4 +7,12 @@
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=myrkmr_lostfound&metric=bugs)](https://sonarcloud.io/summary/new_code?id=myrkmr_lostfound)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=myrkmr_lostfound&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=myrkmr_lostfound)
 
-Java 17 Swing desktop application for adding, deleting, and viewing lost items stored in MongoDB.
+A Java 17 desktop application that records and manages lost items.
+
+Users can add a lost item, view all recorded items, and delete an existing item.
+
+The user interface is developed with Java Swing, while MongoDB is used for data storage. The application follows the model-view-controller and repository design patterns.
+
+The project was developed using test-driven development. Maven manages the build, and Docker provides MongoDB containers for integration and end-to-end testing.
+
+Code quality is checked through GitHub Actions, JaCoCo, PITest, Coveralls, and SonarCloud.

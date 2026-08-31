@@ -66,7 +66,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("descriptionTextBox").requireEnabled();
 		window.label(JLabelMatcher.withText("lost date"));
 		window.textBox("lostDateTextBox").requireEnabled();
-		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isFalse();
 		window.list("lostItemList");
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
 		window.label("errorMessageLabel").requireText(" ");
@@ -79,7 +79,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("itemNameTextBox").setText("Wallet");
 		window.textBox("descriptionTextBox").setText("Black wallet");
 		window.textBox("lostDateTextBox").setText("2026-08-26");
-		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isTrue();
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("itemNameTextBox").enterText("Wallet");
 		window.textBox("descriptionTextBox").enterText(" ");
 		window.textBox("lostDateTextBox").enterText("2026-08-26");
-		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isFalse();
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 				.setModel(lostItems));
 		GuiActionRunner.execute(() -> window.list("lostItemList").target()
 				.setSelectedIndex(0));
-		window.button(JButtonMatcher.withText("Delete Selected")).requireEnabled();
+		assertThat(window.button(JButtonMatcher.withText("Delete Selected")).target().isEnabled()).isTrue();
 		GuiActionRunner.execute(() -> window.list("lostItemList").target()
 				.clearSelection());
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
@@ -124,7 +124,8 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testShowErrorDisplaysMessageAndLostItem() {
 		LostItem lostItem = new LostItem("1", "Wallet");
 		GuiActionRunner.execute(() -> lostItemSwingView.showError("error message", lostItem));
-		window.label("errorMessageLabel").requireText("error message: 1 - Wallet");
+		assertThat(window.label("errorMessageLabel").target().getText())
+				.isEqualTo("error message: 1 - Wallet");
 	}
 
 	@Test
@@ -232,7 +233,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("lostDateTextBox").setText("");
 		window.button(JButtonMatcher.withText("Add")).requireDisabled();
 		window.textBox("lostDateTextBox").setText("2026-08-26");
-		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isTrue();
 	}
 
 	@Test
@@ -250,7 +251,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 				.filter(listener -> listener.getClass().getEnclosingClass() == LostItemSwingView.class)
 				.findFirst().orElseThrow();
 		GuiActionRunner.execute(() -> documentListener.changedUpdate(null));
-		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isTrue();
 	}
 
 	@Test
