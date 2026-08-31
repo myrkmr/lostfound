@@ -14,6 +14,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -32,7 +33,7 @@ public class LostItemSwingView extends JFrame implements LostItemView {
 
 	public LostItemSwingView() {
 		setTitle("Lost and Found Management System");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		JTextField idTextBox = createTextField("idTextBox");
 		JTextField itemNameTextBox = createTextField("itemNameTextBox");
