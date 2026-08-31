@@ -66,7 +66,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("descriptionTextBox").requireEnabled();
 		window.label(JLabelMatcher.withText("lost date"));
 		window.textBox("lostDateTextBox").requireEnabled();
-		window.button(JButtonMatcher.withText("Add")).requireDisabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isFalse();
 		window.list("lostItemList");
 		window.button(JButtonMatcher.withText("Delete Selected")).requireDisabled();
 		window.label("errorMessageLabel").requireText(" ");
