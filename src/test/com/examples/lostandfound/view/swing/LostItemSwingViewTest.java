@@ -251,7 +251,7 @@ public class LostItemSwingViewTest extends AssertJSwingJUnitTestCase {
 				.filter(listener -> listener.getClass().getEnclosingClass() == LostItemSwingView.class)
 				.findFirst().orElseThrow();
 		GuiActionRunner.execute(() -> documentListener.changedUpdate(null));
-		window.button(JButtonMatcher.withText("Add")).requireEnabled();
+		assertThat(window.button(JButtonMatcher.withText("Add")).target().isEnabled()).isTrue();
 	}
 
 	@Test
